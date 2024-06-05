@@ -10,7 +10,7 @@ function placeCharacter(Player, type){
     const container = document.getElementById(`tile${Player}`)
     const tile = document.createElement('img')
     if(type == 1){
-        tile.setAttribute('src', `sprites/Goblin_slayer/down.png`)
+        tile.setAttribute('src', `sprites/Goblin_Slayer/down.png`)
     }else if(type == 2){
         tile.setAttribute('src', `sprites/Goblin.png`)
     }
