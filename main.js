@@ -12,7 +12,7 @@ function placeCharacter(Player, type){
     if(type == 1){
         tile.setAttribute('src', `sprites/Goblin_Slayer/down.png`)
     }else if(type == 2){
-        tile.setAttribute('src', `sprites/Goblin.png`)
+        tile.setAttribute('src', `sprites/goblin.png`)
     }
         tile.setAttribute('id', `sprite`)
     container.appendChild(tile)
