@@ -1,3 +1,36 @@
 body{
-            font-size: 16px;
-        }
+    font-size: 16px;
+    margin-left: 10%;
+    margin-right: 10%;
+    background-color: azure;
+    background-image: url("sprites/cave_background.jpg");
+    background-size: 100%;
+}
+
+label{
+    display: inline-block;
+    color: white;
+}
+
+#grid{
+    height: 500px;
+    width: 500px;
+    display: block;
+}
+
+.tile {
+    border: 1px solid black;
+    box-sizing: border-box;
+    float: left;
+    background-size: 100%;
+    image-rendering: pixelated;
+}
+
+#sprite{
+    display: block;
+    height: 100%;
+    width: 100%;
+    position: relative;
+    image-rendering: pixelated;
+}
+
