@@ -51,8 +51,6 @@ function randomizeGrid(){
         tempGrid.splice(tempGrid.indexOf(playerStart - n*1), 1)
     }
 
-    console.log(tempGrid)
-
     index = (Math.floor(Math.random() * tempGrid.length))
     goblinPos = tempGrid[index]
 
