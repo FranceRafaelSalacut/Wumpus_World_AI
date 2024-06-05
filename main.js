@@ -81,7 +81,10 @@ function randomizeGrid(){
         breeze= [holePos-n*1, holePos-1, holePos+1, holePos+n*1]
         for (let i = 0; i<breeze.length; i++){
             if(breeze[i] > 0 && breeze[i] <= n*n){
-                gameGrid[`tile${breeze[i]}`].Breeze = 1
+                if(!(holePos%n==0 && holePos+1 == breeze[i]) && !(holePos%n==1 && holePos-1 == breeze[i])){
+                    gameGrid[`tile${breeze[i]}`].Breeze = 1
+                }
+               
             }
     }
 
