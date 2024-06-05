@@ -23,62 +23,65 @@ function randomizeGrid(){
     const n = document.getElementById("slider").value
 
     gameGrid = new Object
-    for (let i = 0; i < n * n; i++){
-       gameGrid[`tile${i+1}`] = {Player: 0, Pit: 0, Goblin: 0, breeze:0, stench:0}
+    tempGrid = []
+    for (let i = 1; i <= n * n; i++){
+       gameGrid[`tile${i}`] = {Player: 0, Pit: 0, Goblin: 0, breeze:0, stench:0}
+       tempGrid.push(i)
     }
+
+    console.log(tempGrid)
 
     const Pos = [1, n*1, (n*n)-(n-1), n*n] //Possible locations of the player are on the edges [top-left, top-right, bot-left, bot-right]
     index = (Math.floor(Math.random() * Pos.length))
     const playerStart = Pos[index]
     gameGrid[`tile${playerStart}`].Player = 1
-    
-    //console.log(playerStart)
 
-    const noSpawnZone = [playerStart]
+    console.log(playerStart)
+
+    tempGrid.splice(tempGrid.indexOf(playerStart), 1)
+    console.log(tempGrid)
+    
     if(index == 0){
-        //console.log("top-left")
-        noSpawnZone.push(playerStart + 1)
-        noSpawnZone.push(playerStart + n*1)
+        console.log(`${playerStart + 1} and ${playerStart + n*1}`)
+        tempGrid.splice(tempGrid.indexOf(playerStart + 1), 1)
+        tempGrid.splice(tempGrid.indexOf(playerStart + n*1), 1)
     }else if(index  == 1){
-        //console.log("top-right")
-        noSpawnZone.push(playerStart - 1)
-        noSpawnZone.push(playerStart + n*1)
+        console.log(`${playerStart - 1} and ${playerStart + n*1}`)
+        tempGrid.splice(tempGrid.indexOf(playerStart - 1), 1)
+        tempGrid.splice(tempGrid.indexOf(playerStart + n*1), 1)
     }else if(index == 2){
-        //console.log("bot-left")
-        noSpawnZone.push(playerStart + 1)
-        noSpawnZone.push(playerStart - n*1)
+        console.log(`${playerStart + 1} and ${playerStart - n*1}`)
+        tempGrid.splice(tempGrid.indexOf(playerStart + 1), 1)
+        tempGrid.splice(tempGrid.indexOf(playerStart - n*1), 1)
     }else if(index == 3){
-        //console.log("bot-right")
-        noSpawnZone.push(playerStart - 1)
-        noSpawnZone.push(playerStart - n*1)
+        console.log(`${playerStart - 1} and ${playerStart - n*1}`)
+        tempGrid.splice(tempGrid.indexOf(playerStart - 1), 1)
+        tempGrid.splice(tempGrid.indexOf(playerStart - n*1), 1)
     }
 
-    console.log(noSpawnZone)
+    console.log(tempGrid)
 
-    while(true){
-        goblinPos = (Math.floor(Math.random() * (n*n)))+1
-        if(noSpawnZone.indexOf(goblinPos) == -1){ //source = https://stackoverflow.com/questions/3425291/javascript-if-statement-looking-through-an-array
-            noSpawnZone.push(goblinPos)
-            gameGrid[`tile${goblinPos}`].Goblin = 1
-            break
-        }
-        console.log(goblinPos)
-        console.log("Im here goblin")
-    }
+    index = (Math.floor(Math.random() * tempGrid.length))
+    goblinPos = tempGrid[index]
+    console.log(goblinPos)
+
+    gameGrid[`tile${goblinPos}`].Goblin = 1
+
+    tempGrid.splice(tempGrid.indexOf(goblinPos), 1)
+
     
-    console.log(noSpawnZone)
+    console.log(tempGrid)
 
     numPit = n - 3
 
-    while(true){
-        holePos = (Math.floor(Math.random() * (n*n)))+1
-        if(noSpawnZone.indexOf(holePos) == -1){
-            gameGrid[`tile${holePos}`].Pit = 1
-            break
-        }
-        console.log(holePos)
-        console.log("Im here pit")
-    }
+    index = (Math.floor(Math.random() * tempGrid.length))
+    holePos = tempGrid[index]
+    console.log(holePos)
+    gameGrid[`tile${holePos}`].Pit = 1
+
+    tempGrid.splice(tempGrid.indexOf(holePos), 1)
+
+    console.log(tempGrid)
 
     renderGrid()
 
