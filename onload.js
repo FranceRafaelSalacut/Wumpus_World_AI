@@ -14,8 +14,20 @@ window.onload = function(){
         console.log(transitions)
         console.log("==")
     })
+
+    document.getElementById('start-state').addEventListener('click', (e) =>{
+        startState = true
+        unchange = true
+        canvas.style.cursor = 'crosshair'
+    })
+
+    document.getElementById('end-state').addEventListener('click', (e) =>{
+        finalState = true
+        unchange = true
+        canvas.style.cursor = 'crosshair'
+    })
     
-    document.getElementById('add-transition').addEventListener('click', () => {
+    document.getElementById('add-transition').addEventListener('click', (e) => {
         alert("Click on the first node")
         addingTransition = true
         unchange = true
@@ -55,9 +67,28 @@ window.onload = function(){
             removingState = false
             unchange = false
             canvas.style.cursor = 'default'
+        } else if(startState) {
+            const {offsetX, offsetY} = e
+            const clickedState = states.find(state => state.contains(offsetX, offsetY))
+            for(const st of states){
+                st.isInitial = false
+            }
+            clickedState.isInitial = true
+            draw()
+            canvas.style.cursor = 'default'
+            startState = false
+            unchange = false
+        } else if(finalState) {
+            console.log("here")
+            const {offsetX, offsetY} = e
+            const clickedState = states.find(state => state.contains(offsetX, offsetY))
+            clickedState.isAccept = !clickedState.isAccept
+            draw()
+            canvas.style.cursor = 'default'
+            finalState = false
+            unchange = false
         }
     })
-
 
     canvas.addEventListener('mousedown', (e) => {
         const { offsetX, offsetY } = e
@@ -92,16 +123,6 @@ window.onload = function(){
         }
     })
 
-    canvas.addEventListener('dblclick', (e) => {
-        const { offsetX, offsetY } = e
-        const clickedState = states.find(state => state.contains(offsetX, offsetY))
-        for(const st of states){
-            st.isInitial = false
-        }
-        clickedState.isInitial = true
-        draw()
-    })
-
     document.getElementById('run').addEventListener('click', async () => {
         const inputString = "ababba"
         console.log(transitions)
@@ -132,6 +153,7 @@ window.onload = function(){
     
         //document.getElementById('result').textContent = currentState.isAccept ? 'Accepted' : 'Rejected'
         console.log(`outside ${currentState.isAccept ? 'Accepted' : 'Rejected'}`)
+        currentState.resetColor()
     })
 
     

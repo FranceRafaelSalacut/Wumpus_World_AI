@@ -150,6 +150,7 @@ function renderGrid() {
         const tile = document.createElement('div');
         tile.classList.add('tile')
         tile.setAttribute('id', `tile${i}`)
+        tile.style.caretColor = 'transparent'
         //tile.setAttribute('onmouseover', `uncoverGrid(${i})`)
         tile.style.width = `${tileSize}%`;
         tile.style.height = `${tileSize}%`;
