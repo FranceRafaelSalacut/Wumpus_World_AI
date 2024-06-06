@@ -53,7 +53,7 @@ function placeCharacter(Player, type){
         tile.setAttribute('src', `sprites/goblin.png`)
         tile.setAttribute('id', `sprite`)
     }else if(type == 3){
-        tile.setAttribute('src', `sprites/Arrow.png`)
+        tile.setAttribute('src', `sprites/arrow.png`)
         tile.setAttribute('id', `arrow`)
     }
         
