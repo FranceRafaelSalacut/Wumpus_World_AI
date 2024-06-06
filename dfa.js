@@ -12,36 +12,52 @@ let unchange = false
 
 class State {
     constructor(x, y) {
-        this.id = stateId++
-        this.x = x
-        this.y = y
-        this.radius = 30
-        this.isAccept = false
-        this.isInitial = false
+        this.id = stateId++;
+        this.x = x;
+        this.y = y;
+        this.radius = 30;
+        this.isAccept = false; 
+        this.isInitial = false; 
+        this.color = 'black'; 
     }
 
     draw() {
-        ctx.beginPath()
-        ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI)
-        ctx.stroke()
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
+        ctx.strokeStyle = this.color;
+        ctx.stroke();
         if (this.isAccept) {
-            ctx.beginPath()
-            ctx.arc(this.x, this.y, this.radius - 5, 0, 2 * Math.PI)
-            ctx.stroke()
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.radius - 5, 0, 2 * Math.PI);
+            ctx.stroke();
         }
         if (this.isInitial) {
-            ctx.beginPath()
-            ctx.moveTo(this.x - this.radius - 10, this.y)
-            ctx.lineTo(this.x - this.radius, this.y - 10)
-            ctx.lineTo(this.x - this.radius, this.y + 10)
-            ctx.closePath()
-            ctx.fill()
+            ctx.beginPath();
+            ctx.moveTo(this.x - this.radius, this.y);
+            ctx.lineTo(this.x - this.radius-10, this.y - 10);
+            ctx.lineTo(this.x - this.radius-10, this.y + 10);
+            ctx.closePath();
+            ctx.fill();
         }
-        ctx.fillText(this.id, this.x - 5, this.y + 5)
+        ctx.fillStyle = this.color;
+        ctx.fillText(this.id, this.x - 5, this.y + 5);
     }
 
+    // Method to check if a point (x, y) is inside this state
     contains(x, y) {
-        return Math.sqrt((this.x - x) ** 2 + (this.y - y) ** 2) < this.radius
+        return Math.sqrt((this.x - x) ** 2 + (this.y - y) ** 2) < this.radius;
+    }
+
+    // Method to set the color of the state
+    setColor(color) {
+        this.color = color;
+        draw();
+    }
+
+    // Method to reset the color of the state to default
+    resetColor() {
+        this.color = 'black';
+        draw();
     }
 }
 
@@ -52,14 +68,22 @@ class Transition {
         this.symbol = symbol;
     }
 
+    // Method to draw the transition on the canvas
     draw() {
         if (this.from === this.to) {
+            // Self-transition as a loop
             ctx.beginPath();
-            ctx.arc(this.from.x, this.from.y - this.from.radius, this.from.radius / 2, 0, 2 * Math.PI);
+            const loopRadius = this.from.radius / 2;
+            ctx.arc(this.from.x, this.from.y - this.from.radius, loopRadius, 0.25, 0.9 * Math.PI, true);
             ctx.stroke();
-            ctx.fillText(this.symbol, this.from.x - 10, this.from.y - this.from.radius - 10);
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.lineTo(-10, -5);
+            ctx.lineTo(-10, 5);
+            ctx.closePath();
+            ctx.fill();
+            ctx.fillText(this.symbol, this.from.x - loopRadius + 5, this.from.y - this.from.radius -20);
         } else {
-
             const dx = this.to.x - this.from.x;
             const dy = this.to.y - this.from.y;
             const distance = Math.sqrt(dx * dx + dy * dy);
@@ -74,9 +98,14 @@ class Transition {
             const toX = this.to.x - Math.cos(angle) * this.to.radius;
             const toY = this.to.y - Math.sin(angle) * this.to.radius;
 
+            const count = transitions.filter(t => (t.from === this.from && t.to === this.to) || (t.from === this.to && t.to === this.from)).length;
+            const currentIndex = transitions.filter(t => (t.from === this.from && t.to === this.to) || (t.from === this.to && t.to === this.from)).indexOf(this);
+
+            const adjustedOffset = offset * (currentIndex - (count - 1) / 2);
+
             ctx.beginPath();
             ctx.moveTo(fromX, fromY);
-            ctx.quadraticCurveTo(controlX, controlY, toX, toY);
+            ctx.quadraticCurveTo(controlX + adjustedOffset, controlY + adjustedOffset, toX, toY);
             ctx.stroke();
 
             ctx.save();
@@ -92,10 +121,11 @@ class Transition {
 
             const midX = (fromX + toX) / 2;
             const midY = (fromY + toY) / 2;
-            ctx.fillText(this.symbol, midX + offset * Math.sin(angle) / 2, midY - offset * Math.cos(angle) / 2);
+            ctx.fillText(this.symbol, midX + adjustedOffset * Math.sin(angle) / 2, midY - adjustedOffset * Math.cos(angle) / 2);
         }
     }
 }
+
 
 function load(){
     canvas = document.getElementById('canvas')
@@ -105,7 +135,7 @@ function load(){
 }
 
 function addState() {
-    const state = new State(50, 50)
+    const state = new State(150, 150)
     states.push(state)
     draw()
 }
