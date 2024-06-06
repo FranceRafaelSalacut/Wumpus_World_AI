@@ -7,6 +7,19 @@ body{
     background-size: 100%;
 }
 
+#container{
+    display: block;
+}
+
+#canvas {
+    display: block;
+    border: 1px solid #ccc;
+    height: 500px;
+    width: 500px;
+    float: left;
+    background-color: bisque;
+}
+
 label{
     display: inline-block;
     color: white;
@@ -16,6 +29,7 @@ label{
     height: 500px;
     width: 500px;
     display: block;
+    float: left;
 }
 
 .tile {

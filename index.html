@@ -3,7 +3,9 @@
             <head>
                 <meta charset="UTF-8">
                 <link rel="stylesheet" href="style.css">
-                <script src="main.js"></script>
+                <script src="onload.js"></script>
+                <script src="grid.js"></script>
+                <script src="dfa.js"></script>
                 <title>Wumpus World Simulator</title>
             </head>
             <body>
@@ -12,7 +14,15 @@
                     <span id="gridSize"></span>
                 </label>
                 <input type="range" min="4" max="20" value="4" id="slider" onchange="dispGridSize()">
-                <button type="button" onclick="randomizeGrid()">New Game</button>
+                <button type="button" id="setGrid" >New Game</button>
+                <button id="add-state">Add State</button>
+                <button id="add-transition">Add Transition</button>
+                <button id="remove-state">Remove State</button>
+                <button id="clear-canvas">Clear Canvas</button>
+                <div id="container">
                 <div id="grid"></div>
+                <canvas id="canvas"></canvas>
+                </div>
             </body>
+            
         </html>

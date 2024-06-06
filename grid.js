@@ -1,7 +1,4 @@
-window.onload = function(){
-    dispGridSize()
-    randomizeGrid()
-}
+
 var playerLocation
 var gameGrid
 var covered = false
@@ -61,7 +58,7 @@ function placeCharacter(Player, type){
 }
 
 function randomizeGrid(){
-    console.clear()
+    //console.clear()
     const n = document.getElementById("slider").value
 
     gameGrid = new Object
