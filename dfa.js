@@ -77,55 +77,34 @@ class Transition {
             const loopRadius = this.from.radius / 2;
             ctx.arc(this.from.x, this.from.y - this.from.radius, loopRadius, 0.25, 0.9 * Math.PI, true);
             ctx.stroke();
-            
+
             ctx.fillText(this.symbol, this.from.x - loopRadius + 5, this.from.y - this.from.radius -20);
         } else {
-            // Calculate the distance and angle between the two states
             const dx = this.to.x - this.from.x;
             const dy = this.to.y - this.from.y;
             const distance = Math.sqrt(dx * dx + dy * dy);
+            console.log(distance)
             const angle = Math.atan2(dy, dx);
 
-            // Calculate control points for a quadratic curve to avoid overlapping
-            var offset = 50; // Offset for curves
-            let controlX, controlY;
+            const offset = 15;
+            const controlX = (this.from.x + this.to.x) / 2 + offset * Math.sin(angle);
+            const controlY = (this.from.y + this.to.y) / 2 - offset * Math.cos(angle);
 
-            // Ensure the control point doesn't overlap with other nodes
-            do {
-                controlX = (this.from.x + this.to.x) / 2 + offset * Math.sin(angle);
-                controlY = (this.from.y + this.to.y) / 2 - offset * Math.cos(angle);
-                offset += 10; // Increase the offset if there's an overlap
-            } while (states.some(state => state.contains(controlX, controlY)));
-
-            // Ensure the control point doesn't overlap with other transitions
-            transitions.forEach(transition => {
-                if (transition !== this) {
-                    const dx = controlX - transition.controlX;
-                    const dy = controlY - transition.controlY;
-                    if (Math.sqrt(dx * dx + dy * dy) < 20) {
-                        offset += 10;
-                        controlX = (this.from.x + this.to.x) / 2 + offset * Math.sin(angle);
-                        controlY = (this.from.y + this.to.y) / 2 - offset * Math.cos(angle);
-                    }
-                }
-            });
-
-            // Save control point coordinates
-            this.controlX = controlX;
-            this.controlY = controlY;
-
-            // Calculate the starting and ending points for the transition
             const fromX = this.from.x + Math.cos(angle) * this.from.radius;
             const fromY = this.from.y + Math.sin(angle) * this.from.radius;
             const toX = this.to.x - Math.cos(angle) * this.to.radius;
             const toY = this.to.y - Math.sin(angle) * this.to.radius;
 
+            const count = transitions.filter(t => (t.from === this.from && t.to === this.to) || (t.from === this.to && t.to === this.from)).length;
+            const currentIndex = transitions.filter(t => (t.from === this.from && t.to === this.to) || (t.from === this.to && t.to === this.from)).indexOf(this);
+
+            const adjustedOffset = offset * (currentIndex - (count - 1) / 2);
+
             ctx.beginPath();
             ctx.moveTo(fromX, fromY);
-            ctx.quadraticCurveTo(controlX, controlY, toX, toY);
+            ctx.quadraticCurveTo(controlX + adjustedOffset, controlY + adjustedOffset, toX, toY);
             ctx.stroke();
 
-            // Draw arrowhead
             ctx.save();
             ctx.translate(toX, toY);
             ctx.rotate(angle);
@@ -137,10 +116,9 @@ class Transition {
             ctx.fill();
             ctx.restore();
 
-            // Draw transition symbol
             const midX = (fromX + toX) / 2;
             const midY = (fromY + toY) / 2;
-            ctx.fillText(this.symbol, midX, midY - 10);
+            ctx.fillText(this.symbol, midX , midY - 10);
         }
     }
 }
