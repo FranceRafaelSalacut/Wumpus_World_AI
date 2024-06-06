@@ -34,3 +34,11 @@ label{
     image-rendering: pixelated;
 }
 
+#arrow{
+    display: block;
+    height: 10%;
+    width: 70%;
+    position: relative;
+    image-rendering: pixelated;
+}
+
