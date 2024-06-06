@@ -1,7 +1,10 @@
 
-var playerLocation
-var gameGrid
-var covered = false
+let playerLocation
+let gameGrid
+let covered = false
+let uncover 
+let GameOver = false
+let GameWin = false
 
 function revealGrid(){
     console.log("Reveal thy labyrinth")
@@ -75,19 +78,28 @@ function randomizeGrid(){
 
 
     tempGrid.splice(tempGrid.indexOf(playerStart), 1)
-    
+
+    uncover = [playerStart]
     if(index == 0){
         tempGrid.splice(tempGrid.indexOf(playerStart + 1), 1)
         tempGrid.splice(tempGrid.indexOf(playerStart + n*1), 1)
+        //uncover.push(playerStart + 1)
+        //uncover.push(playerStart + n*1)
     }else if(index  == 1){
         tempGrid.splice(tempGrid.indexOf(playerStart - 1), 1)
         tempGrid.splice(tempGrid.indexOf(playerStart + n*1), 1)
+        //uncover.push(playerStart - 1)
+        //uncover.push(playerStart + n*1)
     }else if(index == 2){
         tempGrid.splice(tempGrid.indexOf(playerStart + 1), 1)
         tempGrid.splice(tempGrid.indexOf(playerStart - n*1), 1)
+        //uncover.push(playerStart + 1)
+        //uncover.push(playerStart - n*1)
     }else if(index == 3){
         tempGrid.splice(tempGrid.indexOf(playerStart - 1), 1)
         tempGrid.splice(tempGrid.indexOf(playerStart - n*1), 1)
+        //uncover.push(playerStart - 1)
+        //uncover.push(playerStart - n*1)
     }
     
     index = (Math.floor(Math.random() * tempGrid.length))
@@ -135,7 +147,7 @@ function randomizeGrid(){
     tempGrid.splice(tempGrid.indexOf(arrowPos), 1)
 
     renderGrid()
-    revealGrid()
+    playerLocation = playerStart
 }
 
 function renderGrid() {
@@ -147,6 +159,8 @@ function renderGrid() {
     const tileSize = 100/ n;
 
     for (let i = 1; i <= n * n; i++) {
+        gameGrid[`tile${i}`].revealed = 0
+
         const tile = document.createElement('div');
         tile.classList.add('tile')
         tile.setAttribute('id', `tile${i}`)
@@ -174,6 +188,10 @@ function renderGrid() {
         tile.style.backgroundImage = "none"
         tile.style.backgroundColor = "grey"
         container.appendChild(tile);
+    }
+
+    for(const t of uncover){
+        uncoverGrid(t)
     }
 }
 

@@ -28,7 +28,7 @@ window.onload = function(){
     })
     
     document.getElementById('add-transition').addEventListener('click', (e) => {
-        alert("Click on the first node")
+        //alert("Click on the first node")
         addingTransition = true
         unchange = true
         canvas.style.cursor = 'crosshair'
@@ -40,11 +40,12 @@ window.onload = function(){
         if (addingTransition) {
             if (!fromState) {
                 fromState = states.find(state => state.contains(offsetX, offsetY))
-                alert("Click on the second node")
+                //alert("Click on the second node")
             } else {
                 const toState = states.find(state => state.contains(offsetX, offsetY))
                 if (fromState && toState) {
-                    const symbol = prompt('Enter transition symbol:')
+                    symbol = prompt('Enter transition symbol:')
+                    if(acceptedActions.indexOf(symbol) == -1) symbol = ''
                     if (symbol) {
                         const transition = new Transition(fromState, toState, symbol)
                         transitions.push(transition)
@@ -124,27 +125,39 @@ window.onload = function(){
     })
 
     document.getElementById('run').addEventListener('click', async () => {
-        const inputString = "ababba"
-        console.log(transitions)
+        //const inputString = ['walk-up', 'walk-right','walk-down', 'walk-left']
+        let pass = false
         let currentState = states.find(state => state.isInitial == true)
-        console.log(currentState)
         if (!currentState) {
             alert('Please set an initial state.')
             return
         }
+
+        let end = states.find(state => state.isAccept == true)
+        if(!end){
+            alert('Please set a final state.')
+            return
+        }
+
+        if(currentState.isInitial == true && currentState.isAccept == true){
+            pass = true
+            currentState.isAccept = false
+        }
     
-        for (const symbol of inputString) {
+        while(currentState.isAccept != true && GameOver == false && GameWin == false) {
+            if(pass){
+                currentState.isAccept = true
+                pass = false
+            }
+
             currentState.setColor('red')
             await new Promise(resolve => setTimeout(resolve, 500)) 
             currentState.resetColor()
             
-            const transition = transitions.find(t => t.from === currentState && t.symbol === symbol)
-            if (!transition) {
-                //document.getElementById('result').textContent = 'Rejected'
-                console.log("loop rejected")
-                return
-            }
+            const transition = transitions.find(t => t.from === currentState)
+            move(transition.symbol)
             currentState = transition.to
+            console.log(GameOver)
         }
     
         currentState.setColor('red')
@@ -152,9 +165,33 @@ window.onload = function(){
         currentState.resetColor()
     
         //document.getElementById('result').textContent = currentState.isAccept ? 'Accepted' : 'Rejected'
-        console.log(`outside ${currentState.isAccept ? 'Accepted' : 'Rejected'}`)
+        //console.log(`outside ${currentState.isAccept ? 'Accepted' : 'Rejected'}`)
         currentState.resetColor()
     })
 
+    document.getElementById('export').addEventListener('click',() => {
+        prompt("this", JSON.stringify(transitions))
+        prompt("that", JSON.stringify(states))
+    })
     
+    document.getElementById('import').addEventListener('click',() => {
+        const t = JSON.parse(prompt("transitions"))
+        const s = JSON.parse(prompt("states"))
+
+        for(const x of s){
+            const state = new State(x.x, x.y)
+            state.isAccept = x.isAccept
+            state.isInitial = x.isInitial
+            states.push(state)
+        }
+
+        for(const x of t){
+            const state = new Transition(x.from, x.to, x.symbol)
+            transitions.push(state)
+        } 
+
+        console.log(transitions)
+        console.log(states)
+        draw()
+    })
 }
