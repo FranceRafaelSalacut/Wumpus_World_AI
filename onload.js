@@ -181,4 +181,9 @@ window.onload = function(){
             alert('Game WIN!')
         }
     })
+
+
+    document.getElementById('controls').addEventListener('click', () =>{
+        $("#HowToPlay").dialog()
+    })
 }
