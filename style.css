@@ -7,16 +7,20 @@ body{
     background-size: 100%;
 }
 
-#container{
+.main{
     display: block;
 }
 
+#container{
+    display: grid;
+    grid-template-columns: 1fr 1fr; 
+}
+
 #canvas {
-    display: block;
     border: 1px solid black ;
-    height: 500px;
-    width: 500px;
-    float: left;
+    height: 700px;
+    width: 100%;
+    vertical-align: middle;
     background-color: bisque;
 }
 
@@ -26,12 +30,13 @@ label{
 }
 
 #grid{
-    height: 500px;
-    width: 500px;
+    height: 700px;
+    width: 100%;
     border: 1px solid black;
-    display: block;
-    float: left;
+    vertical-align: middle;
 }
+
+
 
 .tile {
     border: 1px solid black;
@@ -51,9 +56,13 @@ label{
 
 #arrow{
     display: block;
-    height: 10%;
+    height: 30%;
     width: 70%;
     position: relative;
     image-rendering: pixelated;
+}
+
+.canva_button{
+    float:right;
 }
 

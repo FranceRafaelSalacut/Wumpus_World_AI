@@ -8,12 +8,13 @@ window.onload = function(){
     document.getElementById('remove-state').addEventListener('click', removeState)
     document.getElementById('clear-canvas').addEventListener('click', clearCanvas)
 
-    document.getElementById('check').addEventListener('click',() => {
-        console.log("==")
-        console.log(states)
-        console.log(transitions)
-        console.log("==")
-    })
+    //document.getElementById('check').addEventListener('click',() => {
+    //    console.log("==")
+    //    console.log(states)
+    //    console.log(transitions)
+    //    console.log(gameGrid)
+    //    console.log("==")
+    //})
 
     document.getElementById('start-state').addEventListener('click', (e) =>{
         startState = true
@@ -154,10 +155,17 @@ window.onload = function(){
             await new Promise(resolve => setTimeout(resolve, 500)) 
             currentState.resetColor()
             
-            const transition = transitions.find(t => t.from === currentState)
-            move(transition.symbol)
+
+            transition = transitions.filter(t => t.from === currentState)
+            if(transition.indexOf(t => t.symbol === 'stench') != -1 && warnings == 'stench'){
+                transitions = transitions.filter(t => t.symbol === 'stench')
+            }else if(transition.indexOf(t => t.symbol === 'breeze') != -1 && warnings == 'breeze'){
+                transitions = transitions.filter(t => t.symbol === 'breeze')
+            }
+            transition = transition[Math.floor(Math.random()*transition.length)]
+
+            warnings = move(transition.symbol)
             currentState = transition.to
-            console.log(GameOver)
         }
     
         currentState.setColor('red')
@@ -167,31 +175,10 @@ window.onload = function(){
         //document.getElementById('result').textContent = currentState.isAccept ? 'Accepted' : 'Rejected'
         //console.log(`outside ${currentState.isAccept ? 'Accepted' : 'Rejected'}`)
         currentState.resetColor()
-    })
-
-    document.getElementById('export').addEventListener('click',() => {
-        prompt("this", JSON.stringify(transitions))
-        prompt("that", JSON.stringify(states))
-    })
-    
-    document.getElementById('import').addEventListener('click',() => {
-        const t = JSON.parse(prompt("transitions"))
-        const s = JSON.parse(prompt("states"))
-
-        for(const x of s){
-            const state = new State(x.x, x.y)
-            state.isAccept = x.isAccept
-            state.isInitial = x.isInitial
-            states.push(state)
+        if(GameOver){
+            alert('GAME OVER!')
+        }else if(GameWin){
+            alert('Game WIN!')
         }
-
-        for(const x of t){
-            const state = new Transition(x.from, x.to, x.symbol)
-            transitions.push(state)
-        } 
-
-        console.log(transitions)
-        console.log(states)
-        draw()
     })
 }

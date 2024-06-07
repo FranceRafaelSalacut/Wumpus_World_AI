@@ -5,9 +5,10 @@ let covered = false
 let uncover 
 let GameOver = false
 let GameWin = false
+let sword = false
 
 function revealGrid(){
-    console.log("Reveal thy labyrinth")
+    //console.log("Reveal thy labyrinth")
     const n = document.getElementById("slider").value
     for(let i = 1; i <= n*n; i++){
         uncoverGrid(i)
@@ -22,7 +23,6 @@ function uncoverGrid(i){
     if(gGrd.revealed){
         return 
     }
-
     gGrd.revealed = true
 
     if(gGrd.Player == 1){
@@ -62,6 +62,9 @@ function placeCharacter(Player, type){
 
 function randomizeGrid(){
     //console.clear()
+    sword = false
+    GameOver = false
+    GameWin = false
     const n = document.getElementById("slider").value
 
     gameGrid = new Object
@@ -156,43 +159,42 @@ function renderGrid() {
 
     container.innerHTML = ""
 
-    const tileSize = 100/ n;
+    const tileSize = 100/ n
 
     for (let i = 1; i <= n * n; i++) {
         gameGrid[`tile${i}`].revealed = 0
 
-        const tile = document.createElement('div');
+        const tile = document.createElement('div')
         tile.classList.add('tile')
         tile.setAttribute('id', `tile${i}`)
         tile.style.caretColor = 'transparent'
         //tile.setAttribute('onmouseover', `uncoverGrid(${i})`)
-        tile.style.width = `${tileSize}%`;
-        tile.style.height = `${tileSize}%`;
+        tile.style.width = `${tileSize}%`
+        tile.style.height = `${tileSize}%`
         const gGrid = gameGrid[`tile${i}`]
         if(gGrid.Pit == 1){
             gGrid.backgroundImage = 'url("sprites/cave_pit.png")'
-            
-        }else if(gGrid.Stench == 1 && gGrid.Breeze == 1 && gGrid.Goblin == 0 && gGrid.Player == 0){
+        }else if(gGrid.Stench == 1 && gGrid.Breeze == 1 && gGrid.Goblin == 0 ){
             gGrid.backgroundImage = 'url("sprites/cave_wall_stench_breeze.png")'
-
-        }else if(gGrid.Stench == 1 && gGrid.Goblin == 0 && gGrid.Player == 0){
+        }else if(gGrid.Stench == 1 && gGrid.Goblin == 0 ){
             gGrid.backgroundImage = 'url("sprites/cave_wall_stench.png")'
-
-        }else if(gGrid.Breeze == 1 && gGrid.Goblin == 0 && gGrid.Player == 0){
+        }else if(gGrid.Breeze == 1 && gGrid.Goblin == 0 ){
             gGrid.backgroundImage = 'url("sprites/cave_wall_breeze.png")'
         }
         else{
             gGrid.backgroundImage = 'url("sprites/cave_wall.png")'
         }
 
+
         tile.style.backgroundImage = "none"
         tile.style.backgroundColor = "grey"
-        container.appendChild(tile);
+        container.appendChild(tile)
     }
 
     for(const t of uncover){
         uncoverGrid(t)
     }
+    revealGrid()
 }
 
 function dispGridSize(){
@@ -202,6 +204,6 @@ function dispGridSize(){
     output.textContent = slider.value
 
     slider.addEventListener('input', function() { 
-        output.textContent = this.value; 
-    }); 
+        output.textContent = this.value
+    })
 }

@@ -10,26 +10,26 @@
                 <title>Wumpus World Simulator</title>
             </head>
             <body>
-                <label for="slider">
-                    Grid Size: 
-                    <span id="gridSize"></span>
-                </label>
-                <input type="range" min="4" max="20" value="4" id="slider" onchange="dispGridSize()">
-                <button type="button" id="setGrid" >New Game</button>
-                <button id="add-state">Add State</button>
-                <button id="add-transition">Add Transition</button>
-                <button id="remove-state">Remove State</button>
-                <button id="clear-canvas">Clear Canvas</button>
-                <button id="run">Run</button>
-                <button id="start-state"> Choose Start State</button>
-                <button id="end-state"> Choose End State</button>
-                <button id="check"> check</button>
-                <div id="container">
-                <div id="grid"></div>
-                <canvas id="canvas"></canvas>
+                <div class="main">
+                    <label for="slider">
+                        Grid Size: 
+                        <span id="gridSize"></span>
+                    </label>
+                    <input type="range" min="4" max="20" value="4" id="slider" onchange="dispGridSize()">
+                    <button type="button" id="setGrid" >New Game</button>
+                    <button class="canva_button" id="add-state">Add State</button>
+                    <button class="canva_button" id="add-transition">Add Transition</button>
+                    <button class="canva_button" id="remove-state">Remove State</button>
+                    <button class="canva_button" id="clear-canvas">Clear Canvas</button>
+                    <button class="canva_button" id="run">Run</button>
+                    <button class="canva_button" id="start-state"> Choose Start State</button>
+                    <button class="canva_button" id="end-state"> Choose End State</button>
+                    <!--<button id="check"> check</button>-->
+                    <div id="container">
+                        <div id="grid"></div>
+                        <canvas id="canvas"></canvas>
+                    </div>
                 </div>
-                <button id="export"> Export Code </button>
-                <button id="import"> Import Code</button>
             </body>
             
         </html>
