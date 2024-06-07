@@ -99,3 +99,8 @@ a.button {
     background-color: buttonface;
     text-decoration: none;
 }
+
+#Instructions{
+    background-color: antiquewhite;
+    padding: 5%;
+}
