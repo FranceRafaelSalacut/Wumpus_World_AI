@@ -194,7 +194,7 @@ function renderGrid() {
     for(const t of uncover){
         uncoverGrid(t)
     }
-    //revealGrid()
+    revealGrid()
 }
 
 function dispGridSize(){

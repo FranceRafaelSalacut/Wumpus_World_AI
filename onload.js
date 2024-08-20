@@ -182,8 +182,4 @@ window.onload = function(){
         }
     })
 
-
-    document.getElementById('controls').addEventListener('click', () =>{
-        $("#HowToPlay").dialog()
-    })
 }
